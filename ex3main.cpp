@@ -227,12 +227,14 @@ int main(int argc, char *argv[]) {
 		SDL_Log("Creating window - succeeded");
 	}
 
-	if (!(customEventFunctionTimer = SDL_AddTimer(2000 /* 2 sec */, customEventFunction, windowContext))) {
+	if (!(customEventFunctionTimer = SDL_AddTimer(2000 /* 2 sec */,
+                                                  reinterpret_cast<SDL_TimerCallback>(customEventFunction), windowContext))) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to create custom event timer. See the log for more info.", windowContext);
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Unable to create custom event timer, error: %s", SDL_GetError());
 	}
 
-	if (!(repeatOnceFunctionTimer = SDL_AddTimer(10000 /* 10 sec */, repeatOnceFunction, windowContext))) {
+	if (!(repeatOnceFunctionTimer = SDL_AddTimer(10000 /* 10 sec */,
+                                                 reinterpret_cast<SDL_TimerCallback>(repeatOnceFunction), windowContext))) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to create repeat once timer. See the log for more info.", windowContext);
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Unable to create repeat once timer, error: %s", SDL_GetError());
 	}
