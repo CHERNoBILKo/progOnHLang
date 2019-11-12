@@ -27,7 +27,7 @@ link_libraries(
 )
 set(CMAKE_CXX_STANDARD 17)
 #add_executable(progOnHLang ex1main.cpp)
-add_executable(progOnHLang ex2main.cpp)
+add_executable(progOnHLang ex3main.cpp)
 include_directories(${SDL2_INCLUDE_DIR}
         ${SDL2_IMAGE_INCLUDE_DIR}
         ${SDL2_MIXER_INCLUDE_DIR}
