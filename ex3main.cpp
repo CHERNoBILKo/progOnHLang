@@ -17,7 +17,7 @@
 */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #if defined(_WIN32) || defined(_WINDOWS)
 #include "SDL.h"
@@ -28,12 +28,12 @@
 void fillScreen(SDL_Window *window) {
 	SDL_Surface *screen = SDL_GetWindowSurface(window);
 
-	SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, rand() % 255, rand() % 255, rand() % 255));
+	SDL_FillRect(screen, nullptr, SDL_MapRGB(screen->format, rand() % 255, rand() % 255, rand() % 255));
 
 	SDL_UpdateWindowSurface(window);
 }
 
-int asmFunction(void) {
+int asmFunction() {
 	static int internalValue = 1;
 
 #ifdef __GNUC__
@@ -50,7 +50,6 @@ int asmFunction(void) {
 
 	return internalValue;
 }
-
 int eventFilter(void *userdata, SDL_Event *event) {
 	switch (event->type) {
 	case SDL_KEYDOWN:
@@ -71,24 +70,24 @@ int eventFilter(void *userdata, SDL_Event *event) {
 		SDL_Log("Keyboard text input. Text is '%s'", event->text.text);
 		break;
 	case SDL_FINGERMOTION:
-		SDL_Log("Finger: %i, x: %i, y: %i", event->tfinger.fingerId, event->tfinger.x, event->tfinger.y);
+		SDL_Log("Finger: %li, x: %f, y: %f", event->tfinger.fingerId, event->tfinger.x, event->tfinger.y);
 		break;
 	case SDL_FINGERDOWN:
-		SDL_Log("Finger: %lld down - x: %i, y: %i",
+		SDL_Log("Finger: %ld down - x: %f, y: %f",
 			event->tfinger.fingerId, event->tfinger.x, event->tfinger.y);
 		break;
 	case SDL_FINGERUP:
-		SDL_Log("Finger: %lld up - x: %i, y: %i", event->tfinger.fingerId, event->tfinger.x, event->tfinger.y);
+		SDL_Log("Finger: %ld up - x: %f, y: %f", event->tfinger.fingerId, event->tfinger.x, event->tfinger.y);
 		break;
 	case SDL_MULTIGESTURE:
 		SDL_Log("Multi Gesture: x = %f, y = %f, dAng = %f, dR = %f", event->mgesture.x, event->mgesture.y, event->mgesture.dTheta, event->mgesture.dDist);
 		SDL_Log("Multi Gesture: numDownTouch = %i", event->mgesture.numFingers);
 		break;
 	case SDL_DOLLARGESTURE:
-		SDL_Log("Gesture %lld performed, error: %f", event->dgesture.gestureId, event->dgesture.error);
+		SDL_Log("Gesture %ld performed, error: %f", event->dgesture.gestureId, event->dgesture.error);
 		break;
 	case SDL_DOLLARRECORD:
-		SDL_Log("Recorded gesture: %lld", event->dgesture.gestureId);
+		SDL_Log("Recorded gesture: %ld", event->dgesture.gestureId);
 		break;
 	case SDL_MOUSEMOTION:
 		SDL_Log("Mouse Move. X=%d, Y=%d, RelativeX=%d, RelativeY=%d", event->motion.x, event->motion.y, event->motion.xrel, event->motion.yrel);
@@ -186,7 +185,7 @@ Uint32 repeatOnceFunction(Uint32 interval, SDL_Window *param) {
 	if (asmFunction() != 0) {
 		SDL_HideWindow(param);
 
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Something going wrong", "Find me! I'm scared", NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Something going wrong", "Find me! I'm scared", nullptr);
 
 		SDL_Delay(15000); /* 15 sec */
 		SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "You didn't find me! You disappointed me... I'm leaving.");
@@ -202,7 +201,7 @@ void clearFunction(void) {
 }
 
 int main(int argc, char *argv[]) {
-	SDL_Window *windowContext = NULL;
+	SDL_Window *windowContext = nullptr;
 	SDL_TimerID repeatOnceFunctionTimer;
 	SDL_TimerID customEventFunctionTimer;
 
@@ -210,16 +209,16 @@ int main(int argc, char *argv[]) {
 	srand((unsigned int)NULL);
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to init SDL2. See the log for more info.", NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to init SDL2. See the log for more info.", nullptr);
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Unable to init SDL2, error: %s", SDL_GetError());
 		return 1;
 	}
 
-	SDL_SetEventFilter(eventFilter, NULL);
+	SDL_SetEventFilter(eventFilter, nullptr);
 
 	SDL_Log("Start creating window");
 	if (!(windowContext = SDL_CreateWindow("SDL2: Magic Events", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE))) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to create window. See the log for more info.", NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Unable to create window. See the log for more info.", nullptr);
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Unable to create window, error: %s", SDL_GetError());
 		return 1;
 	}
@@ -239,15 +238,15 @@ int main(int argc, char *argv[]) {
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Unable to create repeat once timer, error: %s", SDL_GetError());
 	}
 
-	SDL_WaitEvent(NULL);
+	SDL_WaitEvent(nullptr);
 
 	SDL_RemoveTimer(repeatOnceFunctionTimer);
 	SDL_RemoveTimer(customEventFunctionTimer);
 
-	SDL_Log("Start destroing window");
+	SDL_Log("Start destroying window");
 	SDL_DestroyWindow(windowContext);
-	windowContext = NULL;
-	SDL_Log("destroing window - succeeded");
+	windowContext = nullptr;
+	SDL_Log("destroying window - succeeded");
 
 	return 0;
 }
