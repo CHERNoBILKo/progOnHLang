@@ -226,11 +226,13 @@ int eventFilter(void *userdata, SDL_Event *event) {
                             event->motion.xrel, event->motion.yrel);
                     break;
                 case 'r':
-                    SDL_Log("Мышь сдвинута. X=%d, Y=%d, Относительн.X=%d, Относительн.Y=%d", event->motion.x, event->motion.y,
+                    SDL_Log("Мышь сдвинута. X=%d, Y=%d, Относительн.X=%d, Относительн.Y=%d", event->motion.x,
+                            event->motion.y,
                             event->motion.xrel, event->motion.yrel);
                     break;
                 default:
-                    SDL_Log("Мышь сдвинута. X=%d, Y=%d, Относительн.X=%d, Относительн.Y=%d", event->motion.x, event->motion.y,
+                    SDL_Log("Мышь сдвинута. X=%d, Y=%d, Относительн.X=%d, Относительн.Y=%d", event->motion.x,
+                            event->motion.y,
                             event->motion.xrel, event->motion.yrel);
                     SDL_Log("Mouse Move. X=%d, Y=%d, RelativeX=%d, RelativeY=%d", event->motion.x, event->motion.y,
                             event->motion.xrel, event->motion.yrel);
@@ -507,11 +509,13 @@ int eventFilter(void *userdata, SDL_Event *event) {
 
                             break;
                         case 'r':
-                            SDL_Log("Окно %d получило неизвестное событие %d", event->window.windowID, event->window.event);
+                            SDL_Log("Окно %d получило неизвестное событие %d", event->window.windowID,
+                                    event->window.event);
 
                             break;
                         default:
-                            SDL_Log("Окно %d получило неизвестное событие %d", event->window.windowID, event->window.event);
+                            SDL_Log("Окно %d получило неизвестное событие %d", event->window.windowID,
+                                    event->window.event);
                             SDL_Log("Window %d got unknown event %d", event->window.windowID, event->window.event);
                             break;
                     }
@@ -614,6 +618,15 @@ int main(int argc, char *argv[]) {
     SDL_Window *windowContext = nullptr;
     SDL_TimerID repeatOnceFunctionTimer;
     SDL_TimerID customEventFunctionTimer;
+    if (argc >= 1) {
+        if (strncmp(argv[1],"--english",9)==0) {
+            locale = 'e';
+        } else if (strncmp(argv[1],"--russian",9)==0) { locale = 'r'; }
+        else if (strncmp(argv[1],"--bilingual",11)==0) { locale = 'i'; }
+        else {
+            locale = 'e';
+        }
+    }
 
     atexit(clearFunction);
     srand((unsigned int) NULL);
