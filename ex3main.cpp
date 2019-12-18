@@ -19,6 +19,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <iostream>
 
 #if defined(_WIN32) || defined(_WINDOWS)
 #include "SDL.h"
@@ -55,7 +56,12 @@ int asmFunction() {
 
     return internalValue;
 }
-
+SDL_Window *windowContext = nullptr;
+void raiseWindow(void* param) {
+	SDL_RestoreWindow((SDL_Window*)param);
+	SDL_RaiseWindow((SDL_Window*)param);
+	std::cout<<"Попытка поднять окно"<<std::endl;
+}
 int eventFilter(void *userdata, SDL_Event *event) {
     switch (event->type) {
         case SDL_KEYDOWN:
@@ -486,6 +492,7 @@ int eventFilter(void *userdata, SDL_Event *event) {
                             SDL_Log("Window %d lost keyboard focus", event->window.windowID);
                             break;
                     }
+		            raiseWindow(windowContext);
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
                     switch (locale) {
@@ -613,9 +620,8 @@ Uint32 repeatOnceFunction(Uint32 interval, SDL_Window *param) {
 void clearFunction(void) {
     SDL_Quit();
 }
-
 int main(int argc, char *argv[]) {
-    SDL_Window *windowContext = nullptr;
+
     SDL_TimerID repeatOnceFunctionTimer;
     SDL_TimerID customEventFunctionTimer;
     if (argc >= 1) {
